@@ -50,7 +50,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterEachCallbac
         Map<UserTypeExtended, StaticUserExtended> muEx = new HashMap();
 
         Arrays.stream(context.getRequiredTestMethod().getParameters())
-                .filter(p -> AnnotationSupport.isAnnotated(p, UserTypeExtended.class))
+                .filter(p -> AnnotationSupport.isAnnotated(p, UserTypeExtended.class) && p.getType().isAssignableFrom(StaticUserExtended.class))
                 .map(p -> p.getAnnotation(UserTypeExtended.class))
                 .forEach(ut -> {
                     Optional<StaticUserExtended> user = Optional.empty();
@@ -82,14 +82,16 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterEachCallbac
     @Override
     public void afterEach(ExtensionContext context) {
         Map<UserTypeExtended, StaticUserExtended> muEx = (Map<UserTypeExtended, StaticUserExtended>) context.getStore(NAMESPACE).getOrComputeIfAbsent(context.getUniqueId(), key -> new HashMap<>());
-        muEx.forEach((ut, u) -> {
-            switch (ut.value()) {
-                case WITH_FRIENDS -> WITH_FRIEND_USERS.add(u);
-                case WITH_INCOME_FRIEND_REQUEST -> WITH_INCOME_FRIEND_REQUEST_EXTENDED_USERS.add(u);
-                case WITH_OUTCOME_FRIEND_REQUEST -> WITH_OUTCOME_FRIEND_REQUEST_EXTENDED_USERS.add(u);
-                case EMPTY -> EMPTY_EXTENDED_USERS.add(u);
-            }
-        });
+        if (muEx != null) {
+            muEx.forEach((ut, u) -> {
+                switch (ut.value()) {
+                    case WITH_FRIENDS -> WITH_FRIEND_USERS.add(u);
+                    case WITH_INCOME_FRIEND_REQUEST -> WITH_INCOME_FRIEND_REQUEST_EXTENDED_USERS.add(u);
+                    case WITH_OUTCOME_FRIEND_REQUEST -> WITH_OUTCOME_FRIEND_REQUEST_EXTENDED_USERS.add(u);
+                    case EMPTY -> EMPTY_EXTENDED_USERS.add(u);
+                }
+            });
+        }
     }
 
     @Override

@@ -2,25 +2,22 @@ package guru.qa.niffler.test.myweb;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.myextensions.UsersQueueExtension;
+import guru.qa.niffler.jupiter.myannotations.meta.WebTest;
 import guru.qa.niffler.mypages.FriendsPage;
 import guru.qa.niffler.mypages.LoginPage;
 import guru.qa.niffler.mypages.MainPage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.jupiter.myextensions.UsersQueueExtension.StaticUserExtended;
 import static guru.qa.niffler.jupiter.myextensions.UsersQueueExtension.UserTypeExtended;
 import static guru.qa.niffler.jupiter.myextensions.UsersQueueExtension.UserTypeExtended.Type.*;
 
-@ExtendWith({BrowserExtension.class, UsersQueueExtension.class})
+@WebTest
 public class FriendsWebTest {
 
     private static final Config CFG = Config.getInstance();
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
     void friendShouldBePresentInFriendsTable(@UserTypeExtended(WITH_FRIENDS) StaticUserExtended user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password());
@@ -32,7 +29,6 @@ public class FriendsWebTest {
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
     void friendsTableShouldBeEmptyForNewUser(@UserTypeExtended(EMPTY) StaticUserExtended user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password());
@@ -44,7 +40,6 @@ public class FriendsWebTest {
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
     void incomeInvitationBePresentInFriendsTable(@UserTypeExtended(WITH_INCOME_FRIEND_REQUEST) StaticUserExtended user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password());
@@ -56,7 +51,6 @@ public class FriendsWebTest {
     }
 
     @Test
-    @ExtendWith(UsersQueueExtension.class)
     void outcomeInvitationBePresentInAllPeoplesTable(@UserTypeExtended(WITH_OUTCOME_FRIEND_REQUEST) StaticUserExtended user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password());
