@@ -20,7 +20,6 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
     public void beforeEach(ExtensionContext context) throws Exception {
         AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
                 .ifPresent(userAnnotation -> {
-                    System.out.println("Cat length - " + userAnnotation.categories().length);
                     if (ArrayUtils.isNotEmpty(userAnnotation.categories())) {
                         Category categoryAnnotation = userAnnotation.categories()[0];
                         String categoryName = "";
