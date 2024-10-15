@@ -1,11 +1,14 @@
 package guru.qa.niffler.jupiter.myextensions;
 
-import com.github.javafaker.Faker;
+import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
 import guru.qa.niffler.jupiter.myannotations.Category;
+import guru.qa.niffler.jupiter.myannotations.User;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.myapis.SpendApiClient;
+import guru.qa.niffler.test.myweb.utils.RandomDataUtils;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
+
 
 public class CategoryExtension implements BeforeEachCallback, ParameterResolver, AfterTestExecutionCallback {
 
@@ -15,34 +18,35 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        Faker faker = new Faker();
-
-        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), Category.class)
-                .ifPresent(anno -> {
-                    String categoryName = "";
-                    if (anno.title().equals("")) {
-                        categoryName = faker.beer().name();
-                    } else {
-                        categoryName = anno.title();
+        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
+                .ifPresent(userAnnotation -> {
+                    if (ArrayUtils.isNotEmpty(userAnnotation.categories())) {
+                        Category categoryAnnotation = userAnnotation.categories()[0];
+                        String categoryName = "";
+                        if (categoryAnnotation.name().equals("")) {
+                            categoryName = RandomDataUtils.randomCategoryName();
+                        } else {
+                            categoryName = categoryAnnotation.name();
+                        }
+                        CategoryJson categoryJson = new CategoryJson(
+                                null,
+                                categoryName,
+                                userAnnotation.username(),
+                                false);
+                        CategoryJson newCategory = spendApiClient.addCategory(categoryJson);
+                        if (categoryAnnotation.archived()) {
+                            CategoryJson archCategory = new CategoryJson(
+                                    newCategory.id(),
+                                    newCategory.name(),
+                                    newCategory.username(),
+                                    true
+                            );
+                            newCategory = spendApiClient.updateCategory(archCategory);
+                        }
+                        context.getStore(NAMESPACE).put(
+                                context.getUniqueId(),
+                                newCategory);
                     }
-                    CategoryJson categoryJson = new CategoryJson(
-                            null,
-                            categoryName,
-                            anno.username(),
-                            false);
-                    CategoryJson newCategory = spendApiClient.addCategory(categoryJson);
-                    if (anno.archived()) {
-                        CategoryJson archCategory = new CategoryJson(
-                                newCategory.id(),
-                                newCategory.name(),
-                                newCategory.username(),
-                                true
-                        );
-                        newCategory = spendApiClient.updateCategory(archCategory);
-                    }
-                    context.getStore(NAMESPACE).put(
-                            context.getUniqueId(),
-                            newCategory);
                 });
     }
 
