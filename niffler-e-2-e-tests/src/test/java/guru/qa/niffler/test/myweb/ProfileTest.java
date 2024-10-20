@@ -6,7 +6,7 @@ import guru.qa.niffler.jupiter.myannotations.Category;
 import guru.qa.niffler.jupiter.myannotations.Spending;
 import guru.qa.niffler.jupiter.myannotations.User;
 import guru.qa.niffler.jupiter.myannotations.meta.WebTest;
-import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.mymodel.CategoryJson;
 import guru.qa.niffler.mypages.LoginPage;
 import guru.qa.niffler.mypages.MainPage;
 import guru.qa.niffler.mypages.ProfilePage;
@@ -24,7 +24,7 @@ public class ProfileTest {
             )},
             spendings = {
                     @Spending(
-                            category = "Milk1",
+                            category = "Milk15",
                             description = "Ammm",
                             amount = 354
                     )
@@ -47,7 +47,7 @@ public class ProfileTest {
             )},
             spendings = {
                     @Spending(
-                            category = "Milk8",
+                            category = "Milk16",
                             description = "Ammm",
                             amount = 354
                     )
