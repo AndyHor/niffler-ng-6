@@ -30,12 +30,7 @@ public record SpendJson(
     return new SpendJson(
         entity.getId(),
         entity.getSpendDate(),
-        new CategoryJson(
-            category.getId(),
-            category.getName(),
-            username,
-            category.isArchived()
-        ),
+        CategoryJson.fromEntity(category),
         entity.getCurrency(),
         entity.getAmount(),
         entity.getDescription(),

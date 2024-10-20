@@ -32,17 +32,8 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                                 null,
                                 categoryName,
                                 userAnnotation.username(),
-                                false);
+                                categoryAnnotation.archived());
                         CategoryJson newCategory = categoryDbClient.createCategory(categoryJson);
-                        if (categoryAnnotation.archived()) {
-                            CategoryJson archCategory = new CategoryJson(
-                                    newCategory.id(),
-                                    newCategory.name(),
-                                    newCategory.username(),
-                                    true
-                            );
-                            newCategory = categoryDbClient.updateCategory(archCategory);
-                        }
                         context.getStore(NAMESPACE).put(
                                 context.getUniqueId(),
                                 newCategory);

@@ -35,11 +35,9 @@ public class CategoryDbClient {
         List<CategoryJson> categoryJsons = new ArrayList<>();
         List<CategoryEntity> categoryEntities = categoryDao.findAllByUsername(username);
 
-        if (!categoryEntities.isEmpty()) {
-            categoryEntities.stream().forEach(e -> {
+        categoryEntities.stream().forEach(e -> {
                 categoryJsons.add(CategoryJson.fromEntity(e));
             });
-        }
 
         return categoryJsons;
     }

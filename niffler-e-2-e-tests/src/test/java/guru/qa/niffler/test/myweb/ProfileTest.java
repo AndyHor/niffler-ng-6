@@ -24,7 +24,7 @@ public class ProfileTest {
             )},
             spendings = {
                     @Spending(
-                            category = "Milk11",
+                            category = "Milk15",
                             description = "Ammm",
                             amount = 354
                     )
@@ -47,7 +47,7 @@ public class ProfileTest {
             )},
             spendings = {
                     @Spending(
-                            category = "Milk12",
+                            category = "Milk16",
                             description = "Ammm",
                             amount = 354
                     )
