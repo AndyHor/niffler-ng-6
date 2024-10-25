@@ -119,10 +119,9 @@ public class UserdataUserDAOJdbc implements UserDataDao {
     @Override
     public void deleteUser(UserEntity user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "delete from \"user\" where username = ? and id = ?"
+                "delete from \"user\" where id = ?"
         )) {
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setObject(2, user.getId());
+            preparedStatement.setObject(1, user.getId());
 
             preparedStatement.execute();
         } catch (SQLException e) {

@@ -20,8 +20,6 @@ public class SpendDaoJdbc implements SpendDao {
 
     private final Connection connection;
 
-    //private final CategoryDao categoryDao = new CategoryDaoJdbc();
-
     public SpendDaoJdbc(Connection connection) {
         this.connection = connection;
     }
@@ -72,7 +70,7 @@ public class SpendDaoJdbc implements SpendDao {
 
                     SpendEntity spendEntity = new SpendEntity();
 
-/*                    CategoryEntity categoryEntity = categoryDao.findCategoryById(resultSet.getObject("category_id", UUID.class)).get();
+                    CategoryEntity categoryEntity = new CategoryDaoJdbc(connection).findCategoryById(resultSet.getObject("category_id", UUID.class)).get();
 
                     spendEntity.setId(resultSet.getObject("id", UUID.class));
                     spendEntity.setUsername(resultSet.getString("username"));
@@ -80,7 +78,7 @@ public class SpendDaoJdbc implements SpendDao {
                     spendEntity.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
                     spendEntity.setAmount(resultSet.getDouble("amount"));
                     spendEntity.setDescription(resultSet.getString("description"));
-                    spendEntity.setCategory(categoryEntity);*/
+                    spendEntity.setCategory(categoryEntity);
 
                     return Optional.of(spendEntity);
                 } else {
@@ -107,7 +105,7 @@ public class SpendDaoJdbc implements SpendDao {
                 while (resultSet.next()) {
                     SpendEntity spendEntity = new SpendEntity();
 
-/*                    CategoryEntity categoryEntity = categoryDao.findCategoryById(resultSet.getObject("category_id", UUID.class)).get();
+                    CategoryEntity categoryEntity = new CategoryDaoJdbc(connection).findCategoryById(resultSet.getObject("category_id", UUID.class)).get();
 
                     spendEntity.setId(resultSet.getObject("id", UUID.class));
                     spendEntity.setUsername(resultSet.getString("username"));
@@ -115,7 +113,7 @@ public class SpendDaoJdbc implements SpendDao {
                     spendEntity.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
                     spendEntity.setAmount(resultSet.getDouble("amount"));
                     spendEntity.setDescription(resultSet.getString("description"));
-                    spendEntity.setCategory(categoryEntity);*/
+                    spendEntity.setCategory(categoryEntity);
 
                     spendEntities.add(spendEntity);
 
@@ -130,10 +128,9 @@ public class SpendDaoJdbc implements SpendDao {
     @Override
     public void deleteSpend(SpendEntity spend) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "delete from spend where username = ? and id = ?"
+                "delete from spend where id = ?"
         )) {
-            preparedStatement.setString(1, spend.getUsername());
-            preparedStatement.setObject(2, spend.getId());
+            preparedStatement.setObject(1, spend.getId());
 
             preparedStatement.execute();
         } catch (SQLException e) {
