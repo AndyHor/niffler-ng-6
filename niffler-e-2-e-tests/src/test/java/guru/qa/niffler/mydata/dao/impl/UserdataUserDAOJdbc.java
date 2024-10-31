@@ -6,6 +6,8 @@ import guru.qa.niffler.mydata.entity.user.UserEntity;
 import guru.qa.niffler.mymodel.CurrencyValues;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -103,6 +105,31 @@ public class UserdataUserDAOJdbc implements UserDataDao {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        List<UserEntity> userEntities = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT * FROM \"user\""
+        )) {
+            preparedStatement.execute();
+
+            try (ResultSet resultSet = preparedStatement.getResultSet()) {
+                if (resultSet.next()) {
+
+                    UserEntity userEntity = new UserEntity();
+
+                    setParamsToUserEntity(userEntity, resultSet);
+
+                    userEntities.add(userEntity);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userEntities;
     }
 
     private void setParamsToUserEntity(UserEntity userEntity, ResultSet resultSet) throws SQLException {
