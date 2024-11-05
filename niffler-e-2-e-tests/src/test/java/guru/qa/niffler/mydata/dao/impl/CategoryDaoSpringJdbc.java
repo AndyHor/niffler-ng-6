@@ -55,7 +55,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE category set name = ?, archived = ? where id = ?",
+                    "UPDATE category SET name = ?, archived = ? where id = ?",
                     Statement.RETURN_GENERATED_KEYS
             );
 
