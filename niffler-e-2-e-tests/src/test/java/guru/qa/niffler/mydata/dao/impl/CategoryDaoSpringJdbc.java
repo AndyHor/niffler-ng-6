@@ -55,14 +55,13 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE category set name = ?, archived = ? where username = ? and id = ?",
+                    "UPDATE category set name = ?, archived = ? where id = ?",
                     Statement.RETURN_GENERATED_KEYS
             );
 
             preparedStatement.setString(1, category.getName());
             preparedStatement.setBoolean(2, category.isArchived());
-            preparedStatement.setString(3, category.getUsername());
-            preparedStatement.setObject(4, category.getId());
+            preparedStatement.setObject(3, category.getId());
 
             return preparedStatement;
 
@@ -130,7 +129,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "delete from category where username = ? and id = ?"
+                    "DELETE FROM category WHERE username = ? and id = ?"
             );
             preparedStatement.setString(1, categoryEntity.getUsername());
             preparedStatement.setObject(2, categoryEntity.getId());

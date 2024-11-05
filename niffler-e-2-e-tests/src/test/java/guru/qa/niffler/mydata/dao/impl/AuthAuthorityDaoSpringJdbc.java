@@ -25,7 +25,7 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
     public void create(AuthorityEntity... authorityEntities) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.batchUpdate(
-                "insert into authority (user_id, authority) values(?, ?)",
+                "INSERT INTO authority (user_id, authority) VALUES(?, ?)",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
